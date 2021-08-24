@@ -1,7 +1,6 @@
 ﻿namespace WorkloadsDb.Core
 {
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
     using System;
@@ -22,14 +21,12 @@
 
         private readonly Dictionary<Type, object> repositories = new Dictionary<Type, object>();
         private readonly ILoggerFactory loggerFactory;
-        private readonly IHostEnvironment hostEnvironment;
         private ILogger<WorkloadContext> logger;
 
-        public WorkloadContext(DbContextOptions<WorkloadContext> options, ILoggerFactory loggerFactory, IHostEnvironment hostEnvironment)
+        public WorkloadContext(DbContextOptions<WorkloadContext> options, ILoggerFactory loggerFactory)
             : base(options)
         {
             this.loggerFactory = loggerFactory;
-            this.hostEnvironment = hostEnvironment;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -67,7 +64,7 @@
                 Database.Migrate();
             }
 
-            if (seed && hostEnvironment.IsDevelopment())
+            if (seed)
             {
                 SeedSampleData();
             }
